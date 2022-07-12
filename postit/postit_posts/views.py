@@ -1,10 +1,16 @@
-from django.shortcuts import render
+from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from rest_framework import generics, permissions, mixins, status
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from . import models, serializers
 
+
+class UserCreate(generics.CreateAPIView):
+    queryset = get_user_model().objects.all()
+    serializer_class = serializers.UserSerializer
+    permission_classes = [permissions.AllowAny]
+    
 
 class PostList(generics.ListCreateAPIView):
     queryset = models.Post.objects.all()
@@ -90,4 +96,4 @@ class PostLikeCreate(generics.CreateAPIView, mixins.DestroyModelMixin):
         else:
             raise ValidationError(_("You don't like this post yet!"))
         
-        
+ 
